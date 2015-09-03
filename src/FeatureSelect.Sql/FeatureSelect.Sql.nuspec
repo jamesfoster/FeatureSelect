@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>James Foster</authors>
+    <owners>jamesfoster</owners>
+    <projectUrl>http://github.com/jamesfoster/FeatureSelect</projectUrl>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A Sql feature source for FeatureSelect</description>
+    <copyright>Copyright 2015</copyright>
+    <tags>featureselect feature toggle select continuous integration sql</tags>
+  </metadata>
+</package>
