@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>James Foster</authors>
+    <owners>jamesfoster</owners>
+    <projectUrl>http://github.com/jamesfoster/FeatureSelect</projectUrl>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>An extensible library for feature toggling in .NET</description>
+    <copyright>Copyright 2015</copyright>
+    <tags>featureselect feature toggle select continuous integration</tags>
+  </metadata>
+</package>

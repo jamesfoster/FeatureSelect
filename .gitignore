@@ -6,6 +6,7 @@ packages/
 *.suo
 *.user
 *.cache
+*.nupkg
 .sass-cache/
 .vs/
 
