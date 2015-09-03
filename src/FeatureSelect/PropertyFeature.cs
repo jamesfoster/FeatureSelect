@@ -3,8 +3,6 @@ namespace FeatureSelect
     using System;
     using System.Linq;
 
-    using Newtonsoft.Json;
-
     public class PropertyFeature : IFeature
     {
         public string Property { get; set; }
@@ -42,11 +40,6 @@ namespace FeatureSelect
             var str2 = value2.ToString().Trim();
 
             return str1.Equals(str2, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(new {Property, Values});
         }
     }
 }
