@@ -44,7 +44,14 @@ namespace FeatureSelect
 
             var options = GetFeatureOptions(featureName);
 
-            return new FeatureFactory().Create(state.Value, options);
+            return new FeatureFactory().Create(featureName, state.Value, options);
+        }
+
+        public IEnumerable<IFeature> ListFeatures()
+        {
+            return FeatureSettings
+                .Keys
+                .Select(GetFeature);
         }
 
         private FeatureState? GetFeatureState(string featureName)

@@ -1,11 +1,15 @@
 ﻿
 namespace FeatureSelect.Tests
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Moq;
 
     using NUnit.Framework;
 
     using Ploeh.AutoFixture;
+    using Ploeh.AutoFixture.AutoMoq;
 
 
     [TestFixture]
@@ -14,6 +18,12 @@ namespace FeatureSelect.Tests
         private readonly Fixture fixture = new Fixture();
 
         private FeatureSelector featureSelector;
+
+        [SetUp]
+        public void SetUp()
+        {
+            fixture.Customize(new AutoMoqCustomization());
+        }
 
         public class Given_a_new_FeatureSelector : FeatureSelectorTests
         {
@@ -39,7 +49,7 @@ namespace FeatureSelect.Tests
                 [SetUp]
                 public void SetUp()
                 {
-                    source = new Mock<IFeatureSource>();
+                    source = fixture.Create<Mock<IFeatureSource>>();
 
                     featureSelector.AddFeatureSource(source.Object);
                 }
@@ -57,7 +67,7 @@ namespace FeatureSelect.Tests
                     {
                         source
                             .Setup(x => x.GetFeature(featureName))
-                            .Returns(new InvalidFeature());
+                            .Returns(new InvalidFeature(featureName));
 
                         AssertFeatureDisabled();
                     }
@@ -67,7 +77,7 @@ namespace FeatureSelect.Tests
                     {
                         source
                             .Setup(x => x.GetFeature(featureName))
-                            .Returns(new OnFeature());
+                            .Returns(new OnFeature(featureName));
 
                         AssertFeatureEnabled();
                     }
@@ -77,7 +87,7 @@ namespace FeatureSelect.Tests
                     {
                         source
                             .Setup(x => x.GetFeature(featureName))
-                            .Returns(new OffFeature());
+                            .Returns(new OffFeature(featureName));
 
                         AssertFeatureDisabled();
                     }
@@ -90,7 +100,7 @@ namespace FeatureSelect.Tests
                     [SetUp]
                     public void SetUp()
                     {
-                        feature = new PropertyFeature("Foo", new[] {"A", "B", "C"});
+                        feature = new PropertyFeature(featureName, "Foo", new[] {"A", "B", "C"});
 
                         source
                             .Setup(x => x.GetFeature(featureName))
@@ -163,6 +173,80 @@ namespace FeatureSelect.Tests
                         Assert.That(disabled, Is.True);
                     }
                 }
+
+                public class When_listing_the_features : When_adding_a_FeatureSource
+                {
+                    [Test]
+                    public void Requests_the_list_of_features_from_the_source()
+                    {
+                        featureSelector.ListFeatures();
+
+                        source.Verify(x => x.ListFeatures());
+                    }
+
+                    [Test]
+                    public void Returns_the_list_of_features_from_the_source()
+                    {
+                        var features = fixture.CreateMany<TestFeature>().ToList();
+
+                        source.Setup(x => x.ListFeatures()).Returns(features);
+
+                        var result = featureSelector.ListFeatures();
+
+                        Assert.That(result, Is.EqualTo(features.OrderBy(x => x.Name)));
+                    }
+
+                    [Test]
+                    public void Returns_the_list_of_features_from_all_sources()
+                    {
+                        var source2 = fixture.Create<Mock<IFeatureSource>>();
+                        featureSelector.AddFeatureSource(source2.Object);
+
+                        var features = fixture.CreateMany<TestFeature>().ToArray();
+                        var features2 = fixture.CreateMany<TestFeature>().ToArray();
+
+                        source.Setup(x => x.ListFeatures()).Returns(features);
+                        source2.Setup(x => x.ListFeatures()).Returns(features2);
+
+                        var result = featureSelector.ListFeatures();
+
+                        Assert.That(result, Is.EqualTo(features.Concat(features2).OrderBy(x => x.Name)));
+                    }
+
+                    [Test]
+                    public void Returns_the_first_feature_with_a_given_name_from_all_sources()
+                    {
+                        var source2 = fixture.Create<Mock<IFeatureSource>>();
+                        featureSelector.AddFeatureSource(source2.Object);
+
+                        var features = fixture.CreateMany<TestFeature>().ToArray();
+                        var features2 =
+                            from f in features
+                            let clone = fixture.Build<TestFeature>().With(y => y.Name, f.Name).Create()
+                            select clone;
+
+                        source.Setup(x => x.ListFeatures()).Returns(features);
+                        source2.Setup(x => x.ListFeatures()).Returns(features2);
+
+                        var result = featureSelector.ListFeatures();
+
+                        Assert.That(result, Is.EqualTo(features.OrderBy(x => x.Name)));
+                    }
+
+                    [Test]
+                    public void Includes_any_unknown_features_requested()
+                    {
+                        var unknownFeatureName = fixture.Create<string>();
+
+                        source.Setup(x => x.GetFeature(unknownFeatureName)).Returns((IFeature) null);
+
+                        featureSelector.Enabled(unknownFeatureName);
+
+                        var result = featureSelector.ListFeatures();
+
+                        Assert.That(result, Has.Exactly(1).Property("Name").EqualTo(unknownFeatureName).And.TypeOf<InvalidFeature>());
+                    }
+                }
             }
 
             private void AssertFeatureEnabled()
@@ -179,6 +263,16 @@ namespace FeatureSelect.Tests
                 Assert.That(enabled, Is.False);
                 var disabled = featureSelector.Disabled(featureName);
                 Assert.That(disabled, Is.True);
+            }
+
+            private class TestFeature : IFeature
+            {
+                public string Name { get; set; }
+
+                public bool IsEnabled(object context)
+                {
+                    return false;
+                }
             }
         }
     }

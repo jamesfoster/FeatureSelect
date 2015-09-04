@@ -64,5 +64,13 @@
 
             Assert.That(feature, Is.InstanceOf<OffFeature>());
         }
+
+        [Test]
+        public void Lists_all_features()
+        {
+            var features = source.ListFeatures();
+
+            Assert.That(features, Has.Exactly(1).Property("Name").EqualTo("OnFeature"));
+        }
     }
 }

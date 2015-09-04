@@ -5,12 +5,15 @@ namespace FeatureSelect
 
     public class PropertyFeature : IFeature
     {
+        public string Name { get; set; }
+
         public string Property { get; set; }
 
         public string[] Values { get; set; }
 
-        public PropertyFeature(string property, string[] values)
+        public PropertyFeature(string name, string property, string[] values)
         {
+            Name = name;
             Property = property;
             Values = values;
         }

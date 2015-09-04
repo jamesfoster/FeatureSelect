@@ -7,13 +7,18 @@ namespace FeatureSelect.Tests
     [TestFixture]
     public class FeatureFactoryTests
     {
+        private string featureName;
+
         [SetUp]
-        public void SetUp() { }
+        public void SetUp()
+        {
+            featureName = "TheFeature";
+        }
 
         [Test]
         public void If_the_state_is_On_then_create_a_OnFeature()
         {
-            var feature = new FeatureFactory().Create(FeatureState.On);
+            var feature = new FeatureFactory().Create(featureName, FeatureState.On);
 
             Assert.That(feature, Is.InstanceOf<OnFeature>());
         }
@@ -21,7 +26,7 @@ namespace FeatureSelect.Tests
         [Test]
         public void If_the_state_is_Off_then_create_a_OffFeature()
         {
-            var feature = new FeatureFactory().Create(FeatureState.Off);
+            var feature = new FeatureFactory().Create(featureName, FeatureState.Off);
 
             Assert.That(feature, Is.InstanceOf<OffFeature>());
         }
@@ -29,7 +34,7 @@ namespace FeatureSelect.Tests
         [Test]
         public void If_the_state_is_Invalid_then_create_a_InvalidFeature()
         {
-            var feature = new FeatureFactory().Create(FeatureState.Invalid);
+            var feature = new FeatureFactory().Create(featureName, FeatureState.Invalid);
 
             Assert.That(feature, Is.InstanceOf<InvalidFeature>());
         }
@@ -42,7 +47,7 @@ namespace FeatureSelect.Tests
                     {"Foo", "A,B,C"}
                 };
 
-            var feature = new FeatureFactory().Create(FeatureState.Property, options);
+            var feature = new FeatureFactory().Create(featureName, FeatureState.Property, options);
 
             var propertyFeature = (PropertyFeature) feature;
 

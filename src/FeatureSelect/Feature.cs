@@ -1,5 +1,7 @@
 namespace FeatureSelect
 {
+    using System.Collections.Generic;
+
     public static class Feature
     {
         private static readonly FeatureSelector Instance = new FeatureSelector();
@@ -22,6 +24,16 @@ namespace FeatureSelect
         public static IFeature GetFeature(string featureName)
         {
             return Instance.GetFeature(featureName);
+        }
+
+        public static List<IFeature> ListFeatures()
+        {
+            return Instance.ListFeatures();
+        }
+
+        public static Dictionary<string, bool> ListFeatureStates(object context)
+        {
+            return Instance.ListFeatureStates(context);
         }
     }
 }
