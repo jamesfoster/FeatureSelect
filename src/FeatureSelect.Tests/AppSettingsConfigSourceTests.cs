@@ -1,5 +1,7 @@
 ﻿namespace FeatureSelect.Tests
 {
+    using System.Collections.Generic;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -53,16 +55,7 @@
             var propertyFeature = (PropertyFeature)feature;
 
             Assert.That(propertyFeature.Property, Is.EqualTo("Foo"));
-        }
-
-        [Test]
-        public void If_you_modify_the_source_at_runtime_you_get_the_new_expected_value()
-        {
-            source.FeatureSettings["OnFeature"] = "Off";
-
-            var feature = source.GetFeature("OnFeature");
-
-            Assert.That(feature, Is.InstanceOf<OffFeature>());
+            Assert.That(propertyFeature.Values, Is.EqualTo(new[] { "A", "B", "C" }));
         }
 
         [Test]
@@ -71,6 +64,46 @@
             var features = source.ListFeatures();
 
             Assert.That(features, Has.Exactly(1).Property("Name").EqualTo("OnFeature"));
+        }
+
+        [Test]
+        public void Setting_a_feature_overrides_the_exiting_feature()
+        {
+            source.SetFeature("OnFeature", "Off");
+
+            var feature = source.GetFeature("OnFeature");
+
+            Assert.That(feature, Is.InstanceOf<OffFeature>());
+        }
+
+        [Test]
+        public void Setting_a_feature_also_updates_the_options()
+        {
+            var options = new Dictionary<string, string> {{"Foo", "Bar, Baz"}};
+
+            source.SetFeature("OnFeature", "Property", options);
+
+            var feature = source.GetFeature("OnFeature");
+
+            var propertyFeature = (PropertyFeature) feature;
+
+            Assert.That(propertyFeature.Property, Is.EqualTo("Foo"));
+            Assert.That(propertyFeature.Values, Is.EqualTo(new[] {"Bar", "Baz"}));
+        }
+
+        [Test]
+        public void Setting_a_feature_also_clears_the_options_if_currently_set()
+        {
+            var options = new Dictionary<string, string> {{"Bar", "Foo"}};
+
+            source.SetFeature("PropertyFeature", "Property", options);
+
+            var feature = source.GetFeature("PropertyFeature");
+
+            var propertyFeature = (PropertyFeature) feature;
+
+            Assert.That(propertyFeature.Property, Is.EqualTo("Bar"));
+            Assert.That(propertyFeature.Values, Is.EqualTo(new[] {"Foo"}));
         }
     }
 }

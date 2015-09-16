@@ -1,6 +1,7 @@
 namespace FeatureSelect
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     public static class Feature
     {
@@ -26,6 +27,11 @@ namespace FeatureSelect
             return Instance.GetFeature(featureName);
         }
 
+        public static void SetFeature(string featureName, string state, IDictionary<string, string> options = null)
+        {
+            Instance.SetFeature(featureName, state, options);
+        }
+
         public static List<IFeature> ListFeatures()
         {
             return Instance.ListFeatures();
@@ -33,7 +39,9 @@ namespace FeatureSelect
 
         public static Dictionary<string, bool> ListFeatureStates(object context)
         {
-            return Instance.ListFeatureStates(context);
+            return Instance
+                .ListFeatures()
+                .ToDictionary(x => x.Name, x => x.IsEnabled(context));
         }
     }
 }

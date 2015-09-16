@@ -100,7 +100,8 @@ namespace FeatureSelect.Tests
                     [SetUp]
                     public void SetUp()
                     {
-                        feature = new PropertyFeature(featureName, "Foo", new[] {"A", "B", "C"});
+                        var options = new Dictionary<string, string> {{"Foo", "A, B, C"}};
+                        feature = new PropertyFeature(featureName, options);
 
                         source
                             .Setup(x => x.GetFeature(featureName))
@@ -136,7 +137,7 @@ namespace FeatureSelect.Tests
                     }
 
                     [Test]
-                    public void The_feature_is_enabled_even_if_lowercase_and_padded_with_spaces()
+                    public void The_feature_is_enabled_even_if_wrong_case_and_padded_with_spaces()
                     {
                         var context = new
                             {
@@ -245,6 +246,48 @@ namespace FeatureSelect.Tests
                         var result = featureSelector.ListFeatures();
 
                         Assert.That(result, Has.Exactly(1).Property("Name").EqualTo(unknownFeatureName).And.TypeOf<InvalidFeature>());
+                    }
+                }
+
+
+                public class When_setting_a_features : When_adding_a_FeatureSource
+                {
+                    [Test]
+                    public void Sets_the_feature_on_the_source()
+                    {
+                        featureSelector.SetFeature("A", "B");
+
+                        source.Verify(x => x.SetFeature("A", "B", null));
+                    }
+
+                    [Test]
+                    public void If_there_are_multiple_sources_sets_it_on_the_first_source_if_it_returns_true()
+                    {
+                        var source2 = fixture.Create<Mock<IFeatureSource>>();
+                        featureSelector.AddFeatureSource(source2.Object);
+
+                        source.Setup(x => x.SetFeature("A", "B", null)).Returns(true);
+                        source2.Setup(x => x.SetFeature("A", "B", null)).Returns(false);
+
+                        featureSelector.SetFeature("A", "B");
+
+                        source.Verify(x => x.SetFeature("A", "B", null));
+                        source2.Verify(x => x.SetFeature("A", "B", null), Times.Never());
+                    }
+
+                    [Test]
+                    public void If_there_are_multiple_sources_continues_setting_it_if_the_previous_sources_returned_false()
+                    {
+                        var source2 = fixture.Create<Mock<IFeatureSource>>();
+                        featureSelector.AddFeatureSource(source2.Object);
+
+                        source.Setup(x => x.SetFeature("A", "B", null)).Returns(false);
+                        source2.Setup(x => x.SetFeature("A", "B", null)).Returns(false);
+
+                        featureSelector.SetFeature("A", "B");
+
+                        source.Verify(x => x.SetFeature("A", "B", null));
+                        source2.Verify(x => x.SetFeature("A", "B", null));
                     }
                 }
             }

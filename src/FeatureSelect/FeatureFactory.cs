@@ -17,10 +17,7 @@ namespace FeatureSelect
                     return new OffFeature(featureName);
 
                 case FeatureState.Property:
-                    var propertyName = options.Keys.Single();
-                    var values = options[propertyName].Split(',');
-
-                    return new PropertyFeature(featureName, propertyName, values);
+                    return new PropertyFeature(featureName, options);
 
                 default:
                     return new InvalidFeature(featureName);

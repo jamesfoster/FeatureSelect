@@ -1,6 +1,7 @@
 namespace FeatureSelect
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     public class PropertyFeature : IFeature
@@ -11,8 +12,14 @@ namespace FeatureSelect
 
         public string[] Values { get; set; }
 
-        public PropertyFeature(string name, string property, string[] values)
+        public PropertyFeature(string name, Dictionary<string, string> options)
         {
+            var property = options.Keys.Single();
+            var values = options[property]
+                .Split(',')
+                .Select(x => x.Trim())
+                .ToArray();
+
             Name = name;
             Property = property;
             Values = values;

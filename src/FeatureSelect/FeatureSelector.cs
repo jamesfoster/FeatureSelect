@@ -1,5 +1,6 @@
 ﻿namespace FeatureSelect
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -45,6 +46,31 @@
                 .FirstOrDefault(x => x != null);
         }
 
+        public void SetFeature(string featureName, string state, IDictionary<string, string> options = null)
+        {
+            foreach (var source in Sources)
+            {
+                var success = TrySetFeature(source, featureName, state, options);
+
+                if (success)
+                {
+                    break;
+                }
+            }
+        }
+
+        private static bool TrySetFeature(IFeatureSource source, string featureName, string state, IDictionary<string, string> options)
+        {
+            try
+            {
+                return source.SetFeature(featureName, state, options);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public List<IFeature> ListFeatures()
         {
             var unknown = unknownFeatures.Select(x => new InvalidFeature(x));
@@ -56,12 +82,6 @@
                 .Concat(unknown)
                 .OrderBy(x => x.Name)
                 .ToList();
-        }
-
-        public Dictionary<string, bool> ListFeatureStates(object context)
-        {
-            return ListFeatures()
-                .ToDictionary(x => x.Name, x => x.IsEnabled(context));
         }
     }
 }

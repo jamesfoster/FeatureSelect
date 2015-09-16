@@ -47,6 +47,33 @@ namespace FeatureSelect
             return new FeatureFactory().Create(featureName, state, options);
         }
 
+        public bool SetFeature(string featureName, string state, IDictionary<string, string> options = null)
+        {
+            FeatureSettings[featureName] = state;
+
+            var existingOptions = FeatureSettings
+                .Where(x => IsFeatureOption(featureName, x))
+                .Select(x => x.Key)
+                .ToList();
+
+            foreach (var option in existingOptions)
+            {
+                FeatureSettings.Remove(option);
+            }
+
+            if (options != null)
+            {
+                foreach (var option in options)
+                {
+                    var optionName = string.Format("{0}.{1}", featureName, option.Key);
+
+                    FeatureSettings[optionName] = option.Value;
+                }
+            }
+
+            return true;
+        }
+
         public IEnumerable<IFeature> ListFeatures()
         {
             return FeatureSettings
