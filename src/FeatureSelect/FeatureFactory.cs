@@ -6,7 +6,7 @@ namespace FeatureSelect
 
     public class FeatureFactory
     {
-        public IFeature Create(string featureName, FeatureState state, Dictionary<string, string> options = null)
+        public IFeature Create(string featureName, string state, Dictionary<string, string> options = null)
         {
             switch (state)
             {
@@ -16,9 +16,6 @@ namespace FeatureSelect
                 case FeatureState.Off:
                     return new OffFeature(featureName);
 
-                case FeatureState.Invalid:
-                    return new InvalidFeature(featureName);
-
                 case FeatureState.Property:
                     var propertyName = options.Keys.Single();
                     var values = options[propertyName].Split(',');
@@ -26,7 +23,7 @@ namespace FeatureSelect
                     return new PropertyFeature(featureName, propertyName, values);
 
                 default:
-                    throw new InvalidOperationException(string.Format("Invalid state {0}", state));
+                    return new InvalidFeature(featureName);
             }
         }
     }

@@ -1,15 +1,11 @@
 namespace FeatureSelect
 {
-    public enum FeatureState
+    public static class FeatureState
     {
-        Unknown,
-
-        Invalid,
-
-        On,
-
-        Off,
-
-        Property
+        public const string Unknown = "Unknown";
+        public const string Invalid = "Invalid";
+        public const string On = "On";
+        public const string Off = "Off";
+        public const string Property = "Property";
     }
 }

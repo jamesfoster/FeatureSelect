@@ -37,14 +37,14 @@ namespace FeatureSelect
         {
             var state = GetFeatureState(featureName);
 
-            if (state == null)
+            if (string.IsNullOrEmpty(state))
             {
                 return null;
             }
 
             var options = GetFeatureOptions(featureName);
 
-            return new FeatureFactory().Create(featureName, state.Value, options);
+            return new FeatureFactory().Create(featureName, state, options);
         }
 
         public IEnumerable<IFeature> ListFeatures()
@@ -54,22 +54,14 @@ namespace FeatureSelect
                 .Select(GetFeature);
         }
 
-        private FeatureState? GetFeatureState(string featureName)
+        private string GetFeatureState(string featureName)
         {
             if (!FeatureSettings.ContainsKey(featureName))
             {
                 return null;
             }
 
-            var setting = FeatureSettings[featureName];
-
-            FeatureState state;
-            if (Enum.TryParse(setting, out state))
-            {
-                return state;
-            }
-
-            return FeatureState.Invalid;
+            return FeatureSettings[featureName];
         }
 
         private Dictionary<string, string> GetFeatureOptions(string featureName)
