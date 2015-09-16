@@ -20,7 +20,7 @@ namespace FeatureSelect.Sql
 
         public IFeature GetFeature(string featureName)
         {
-            var data = GetFeatureData();
+            var data = GetFeatureData(featureName);
 
             if (data == null || data.Count == 0)
             {
@@ -32,6 +32,44 @@ namespace FeatureSelect.Sql
             var options = GetFeatureOptions(feature);
 
             return new FeatureFactory().Create(featureName, feature.State, options);
+        }
+
+        public bool SetFeature(string featureName, string state, IDictionary<string, string> options)
+        {
+            using (var conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                SetFeatureData(conn.CreateCommand(), featureName, state, options);
+
+                conn.Close();
+            }
+
+            return true;
+        }
+
+        private void SetFeatureData(SqlCommand cmd, string featureName, string state, IDictionary<string, string> options)
+        {
+            cmd.CommandText = string.Format("UPDATE {0} SET State = @State, PropertyName = @PropertyName, PropertyValues = @PropertyValues WHERE Name = @Name", tableName);
+
+            var propertyName = options == null ? "" : options.First().Key;
+            var propertyValues = options == null ? "" : options.First().Value;
+
+            cmd.Parameters.Add(new SqlParameter("@State", state));
+            cmd.Parameters.Add(new SqlParameter("@PropertyName", propertyName));
+            cmd.Parameters.Add(new SqlParameter("@PropertyValues", propertyValues));
+            cmd.Parameters.Add(new SqlParameter("@Name", featureName));
+
+            var rows = cmd.ExecuteNonQuery();
+
+            if (rows > 0)
+            {
+                return;
+            }
+
+            cmd.CommandText = string.Format("INSERT INTO {0} (Name, State, PropertyName, PropertyValues) VALUES (@Name, @State, @PropertyName, @PropertyValues)", tableName);
+
+            cmd.ExecuteNonQuery();
         }
 
         public IEnumerable<IFeature> ListFeatures()
@@ -51,30 +89,31 @@ namespace FeatureSelect.Sql
                 select factory.Create(feature.Name, feature.State, options);
         }
 
-        private List<FeatureData> GetFeatureData()
+        private List<FeatureData> GetFeatureData(string featureName = null)
         {
             List<FeatureData> data;
+
             using (var conn = new SqlConnection(connectionString))
             {
                 conn.Open();
 
-                data = GetFeatureData(conn);
+                data = GetFeatureData(conn.CreateCommand(), featureName);
 
                 conn.Close();
             }
+
             return data;
         }
 
-        private List<FeatureData> GetFeatureData(SqlConnection connection, string featureName = null)
+        private List<FeatureData> GetFeatureData(SqlCommand cmd, string featureName)
         {
             var commandText = string.Format("SELECT Name, State, PropertyName, PropertyValues FROM {0}", tableName);
 
             if (!string.IsNullOrEmpty(featureName))
             {
-                commandText += string.Format(" WHERE Name = '{0}'", featureName);
+                commandText += " WHERE Name = @Name";
+                cmd.Parameters.Add(new SqlParameter("@Name", featureName));
             }
-
-            var cmd = connection.CreateCommand();
 
             cmd.CommandText = commandText;
 
@@ -97,25 +136,13 @@ namespace FeatureSelect.Sql
                     new FeatureData
                         {
                             Name = reader.GetString(0),
-                            State = GetState(reader.GetString(1)),
+                            State = reader.GetString(1).Trim(),
                             PropertyName = reader.IsDBNull(2) ? null : reader.GetString(2),
                             PropertyValues = reader.IsDBNull(3) ? null : reader.GetString(3)
                         });
             }
 
             return results;
-        }
-
-        private static FeatureState GetState(string value)
-        {
-            FeatureState state;
-
-            if (!Enum.TryParse(value, out state))
-            {
-                return FeatureState.Invalid;
-            }
-
-            return state;
         }
 
         private Dictionary<string, string> GetFeatureOptions(FeatureData data)
@@ -134,7 +161,7 @@ namespace FeatureSelect.Sql
         {
             public string Name { get; set; }
 
-            public FeatureState State { get; set; }
+            public string State { get; set; }
 
             public string PropertyName { get; set; }
 
