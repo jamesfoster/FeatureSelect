@@ -4,6 +4,7 @@ namespace FeatureSelect.Sql
     using System.Collections.Generic;
     using System.Configuration;
     using System.Data.SqlClient;
+    using System.Linq;
 
     public class SqlFeatureSource : IFeatureSource
     {
@@ -19,30 +20,63 @@ namespace FeatureSelect.Sql
 
         public IFeature GetFeature(string featureName)
         {
-            FeatureData data;
-            using (var conn = new SqlConnection(connectionString))
+            var data = GetFeatureData();
+
+            if (data == null || data.Count == 0)
             {
-                conn.Open();
-
-                data = GetFeatureData(featureName, conn);
-
-                conn.Close();
+                return null;
             }
+
+            var feature = data.First();
+
+            var options = GetFeatureOptions(feature);
+
+            return new FeatureFactory().Create(featureName, feature.State, options);
+        }
+
+        public IEnumerable<IFeature> ListFeatures()
+        {
+            var data = GetFeatureData();
 
             if (data == null)
             {
                 return null;
             }
 
-            var options = GetFeatureOptions(data);
+            var factory = new FeatureFactory();
 
-            return new FeatureFactory().Create(data.State, options);
+            return
+                from feature in data
+                let options = GetFeatureOptions(feature)
+                select factory.Create(feature.Name, feature.State, options);
         }
 
-        private FeatureData GetFeatureData(string featureName, SqlConnection connection)
+        private List<FeatureData> GetFeatureData()
         {
+            List<FeatureData> data;
+            using (var conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                data = GetFeatureData(conn);
+
+                conn.Close();
+            }
+            return data;
+        }
+
+        private List<FeatureData> GetFeatureData(SqlConnection connection, string featureName = null)
+        {
+            var commandText = string.Format("SELECT Name, State, PropertyName, PropertyValues FROM {0}", tableName);
+
+            if (!string.IsNullOrEmpty(featureName))
+            {
+                commandText += string.Format(" WHERE Name = '{0}'", featureName);
+            }
+
             var cmd = connection.CreateCommand();
-            cmd.CommandText = string.Format("SELECT State, PropertyName, PropertyValues FROM {0} WHERE Name = '{1}'", tableName, featureName);
+
+            cmd.CommandText = commandText;
 
             SqlDataReader reader;
 
@@ -55,17 +89,21 @@ namespace FeatureSelect.Sql
                 return null;
             }
 
-            if (!reader.Read())
+            var results = new List<FeatureData>();
+
+            while (reader.Read())
             {
-                return null;
+                results.Add(
+                    new FeatureData
+                        {
+                            Name = reader.GetString(0),
+                            State = GetState(reader.GetString(1)),
+                            PropertyName = reader.IsDBNull(2) ? null : reader.GetString(2),
+                            PropertyValues = reader.IsDBNull(3) ? null : reader.GetString(3)
+                        });
             }
 
-            return new FeatureData
-                {
-                    State = GetState(reader.GetString(0)),
-                    PropertyName = reader.IsDBNull(1) ? null : reader.GetString(1),
-                    PropertyValues = reader.IsDBNull(2) ? null : reader.GetString(2)
-                };
+            return results;
         }
 
         private static FeatureState GetState(string value)
@@ -94,6 +132,8 @@ namespace FeatureSelect.Sql
 
         private class FeatureData
         {
+            public string Name { get; set; }
+
             public FeatureState State { get; set; }
 
             public string PropertyName { get; set; }

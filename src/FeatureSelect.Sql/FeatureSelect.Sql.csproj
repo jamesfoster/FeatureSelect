@@ -39,9 +39,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FeatureSelect, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FeatureSelect, Version=0.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FeatureSelect.0.0.2.0\lib\net451\FeatureSelect.dll</HintPath>
+      <HintPath>..\packages\FeatureSelect.0.0.3.0\lib\net451\FeatureSelect.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
