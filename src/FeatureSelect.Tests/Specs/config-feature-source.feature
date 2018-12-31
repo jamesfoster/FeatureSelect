@@ -18,6 +18,9 @@ Scenario: Loading config from a file
   And feature "unknown" is unknown
 
 Scenario Outline: Can configure features based on config
+
+  Feature "feature3" is enabled only if the cohort is "male 18-25"
+
   Given features are defined in a config file "settings.json" under prefix "features"
   And the context contains
   | Key    | Value    |
@@ -31,6 +34,9 @@ Scenario Outline: Can configure features based on config
   | female 18-25 | disabled |
 
 Scenario Outline: Config based features can accept multiple values
+
+  Feature "feature4" is enabled only if the company is "Abc" OR "Xyz"
+
   Given features are defined in a config file "settings.json" under prefix "features"
   And the context contains
   | Key     | Value   |
@@ -44,6 +50,10 @@ Scenario Outline: Config based features can accept multiple values
   | Ghi   | disabled |
 
 Scenario Outline: Config based features can accept regular expressions
+
+  Feature "feature5" is enabled only if the company
+  starts with "abc"
+
   Given features are defined in a config file "settings.json" under prefix "features"
   And the context contains
   | Key     | Value   |
@@ -57,6 +67,12 @@ Scenario Outline: Config based features can accept regular expressions
   | xyz    | disabled |
 
 Scenario Outline: Multiple values including regular expressions
+
+  Feature "feature6" is enabled only if the company
+  starts with "abc" OR
+  ends with "abc" OR
+  is "ZZZ"
+
   Given features are defined in a config file "settings.json" under prefix "features"
   And the context contains
   | Key     | Value   |
@@ -72,6 +88,11 @@ Scenario Outline: Multiple values including regular expressions
   | xyz    | disabled |
 
 Scenario Outline: Config based features can accept comparisons
+
+  Feature "feature7" is enabled only if the price is
+  less than 27 OR
+  greater than or equal to 30
+
   Given features are defined in a config file "settings.json" under prefix "features"
   And the context contains
   | Key     | Value   |
@@ -80,11 +101,19 @@ Scenario Outline: Config based features can accept comparisons
 
   Examples:
   | value | result   |
-  | 17    | disabled |
-  | 18    | enabled  |
-  | 19    | enabled  |
+  | 26    | enabled  |
+  | 27    | disabled |
+  | 28    | disabled |
+  | 29    | disabled |
+  | 30    | enabled  |
+  | 31    | enabled  |
 
 Scenario Outline: Config based features can accept compound comparisons
+
+  Feature "feature8" is enabled only if the price is
+  greater than 17 AND
+  less than or equal to 21
+
   Given features are defined in a config file "settings.json" under prefix "features"
   And the context contains
   | Key     | Value   |

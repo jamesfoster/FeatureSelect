@@ -113,11 +113,11 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestCaseAttribute("female 18-25", "disabled", null)]
         public virtual void CanConfigureFeaturesBasedOnConfig(string value, string result, string[] exampleTags)
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can configure features based on config", null, exampleTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can configure features based on config", "  Feature \"feature3\" is enabled only if the cohort is \"male 18-25\"", exampleTags);
 #line 20
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 21
+#line 24
   testRunner.Given("features are defined in a config file \"settings.json\" under prefix \"features\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
@@ -126,9 +126,9 @@ this.ScenarioInitialize(scenarioInfo);
             table1.AddRow(new string[] {
                         "cohort",
                         string.Format("{0}", value)});
-#line 22
-  testRunner.And("the context contains", ((string)(null)), table1, "And ");
 #line 25
+  testRunner.And("the context contains", ((string)(null)), table1, "And ");
+#line 28
   testRunner.Then(string.Format("feature \"feature3\" is {0}", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -141,11 +141,11 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestCaseAttribute("Ghi", "disabled", null)]
         public virtual void ConfigBasedFeaturesCanAcceptMultipleValues(string value, string result, string[] exampleTags)
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Config based features can accept multiple values", null, exampleTags);
-#line 33
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Config based features can accept multiple values", "  Feature \"feature4\" is enabled only if the company is \"Abc\" OR \"Xyz\"", exampleTags);
+#line 36
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 34
+#line 40
   testRunner.Given("features are defined in a config file \"settings.json\" under prefix \"features\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
@@ -154,9 +154,9 @@ this.ScenarioInitialize(scenarioInfo);
             table2.AddRow(new string[] {
                         "company",
                         string.Format("{0}", value)});
-#line 35
+#line 41
   testRunner.And("the context contains", ((string)(null)), table2, "And ");
-#line 38
+#line 44
   testRunner.Then(string.Format("feature \"feature4\" is {0}", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -169,11 +169,11 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestCaseAttribute("xyz", "disabled", null)]
         public virtual void ConfigBasedFeaturesCanAcceptRegularExpressions(string value, string result, string[] exampleTags)
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Config based features can accept regular expressions", null, exampleTags);
-#line 46
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Config based features can accept regular expressions", "  Feature \"feature5\" is enabled only if the company\r\n  starts with \"abc\"", exampleTags);
+#line 52
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 47
+#line 57
   testRunner.Given("features are defined in a config file \"settings.json\" under prefix \"features\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
@@ -182,9 +182,9 @@ this.ScenarioInitialize(scenarioInfo);
             table3.AddRow(new string[] {
                         "company",
                         string.Format("{0}", value)});
-#line 48
+#line 58
   testRunner.And("the context contains", ((string)(null)), table3, "And ");
-#line 51
+#line 61
   testRunner.Then(string.Format("feature \"feature5\" is {0}", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -199,11 +199,12 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestCaseAttribute("xyz", "disabled", null)]
         public virtual void MultipleValuesIncludingRegularExpressions(string value, string result, string[] exampleTags)
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Multiple values including regular expressions", null, exampleTags);
-#line 59
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Multiple values including regular expressions", "  Feature \"feature6\" is enabled only if the company\r\n  starts with \"abc\" OR\r\n  en" +
+                    "ds with \"abc\" OR\r\n  is \"ZZZ\"", exampleTags);
+#line 69
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 60
+#line 76
   testRunner.Given("features are defined in a config file \"settings.json\" under prefix \"features\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
@@ -212,9 +213,9 @@ this.ScenarioInitialize(scenarioInfo);
             table4.AddRow(new string[] {
                         "company",
                         string.Format("{0}", value)});
-#line 61
+#line 77
   testRunner.And("the context contains", ((string)(null)), table4, "And ");
-#line 64
+#line 80
   testRunner.Then(string.Format("feature \"feature6\" is {0}", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -222,16 +223,20 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Config based features can accept comparisons")]
-        [NUnit.Framework.TestCaseAttribute("17", "disabled", null)]
-        [NUnit.Framework.TestCaseAttribute("18", "enabled", null)]
-        [NUnit.Framework.TestCaseAttribute("19", "enabled", null)]
+        [NUnit.Framework.TestCaseAttribute("26", "enabled", null)]
+        [NUnit.Framework.TestCaseAttribute("27", "disabled", null)]
+        [NUnit.Framework.TestCaseAttribute("28", "disabled", null)]
+        [NUnit.Framework.TestCaseAttribute("29", "disabled", null)]
+        [NUnit.Framework.TestCaseAttribute("30", "enabled", null)]
+        [NUnit.Framework.TestCaseAttribute("31", "enabled", null)]
         public virtual void ConfigBasedFeaturesCanAcceptComparisons(string value, string result, string[] exampleTags)
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Config based features can accept comparisons", null, exampleTags);
-#line 74
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Config based features can accept comparisons", "  Feature \"feature7\" is enabled only if the price is\r\n  less than 27 OR\r\n  greate" +
+                    "r than or equal to 30", exampleTags);
+#line 90
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 75
+#line 96
   testRunner.Given("features are defined in a config file \"settings.json\" under prefix \"features\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
@@ -240,9 +245,9 @@ this.ScenarioInitialize(scenarioInfo);
             table5.AddRow(new string[] {
                         "price",
                         string.Format("{0}", value)});
-#line 76
+#line 97
   testRunner.And("the context contains", ((string)(null)), table5, "And ");
-#line 79
+#line 100
   testRunner.Then(string.Format("feature \"feature7\" is {0}", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -258,11 +263,12 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestCaseAttribute("22", "disabled", null)]
         public virtual void ConfigBasedFeaturesCanAcceptCompoundComparisons(string value, string result, string[] exampleTags)
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Config based features can accept compound comparisons", null, exampleTags);
-#line 87
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Config based features can accept compound comparisons", "  Feature \"feature8\" is enabled only if the price is\r\n  greater than 17 AND\r\n  le" +
+                    "ss than or equal to 21", exampleTags);
+#line 111
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 88
+#line 117
   testRunner.Given("features are defined in a config file \"settings.json\" under prefix \"features\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
@@ -271,9 +277,9 @@ this.ScenarioInitialize(scenarioInfo);
             table6.AddRow(new string[] {
                         "price",
                         string.Format("{0}", value)});
-#line 89
+#line 118
   testRunner.And("the context contains", ((string)(null)), table6, "And ");
-#line 92
+#line 121
   testRunner.Then(string.Format("feature \"feature8\" is {0}", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
