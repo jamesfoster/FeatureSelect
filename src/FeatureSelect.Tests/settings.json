@@ -1,0 +1,39 @@
+﻿{
+  "features": {
+    "feature1": "enabled",
+    "feature1b": "EnAbLeD",
+    "feature2": "disabled",
+    "feature2b": "DiSaBlEd",
+    "feature3": {
+      "cohort": "male 18-25"
+    },
+    "feature4": {
+      "company": [ "Abc", "Xyz" ]
+    },
+    "feature5": {
+      "company": { "$regex": "^abc" }
+    },
+    "feature6": {
+      "company": [
+        { "$regex": "^abc" },
+        { "$regex": "abc$" },
+        { "$unknown": [ 123 ] },
+        "ZZZ"
+      ]
+    },
+    "feature7": {
+      "price": [
+        { "$gt": 17 }
+      ]
+    },
+    "feature8": {
+      "price": {
+        "$all": [
+          { "$gt": 17 },
+          { "$lte": 21 }
+        ]
+      }
+    },
+    "null-feature": null
+  } 
+}
