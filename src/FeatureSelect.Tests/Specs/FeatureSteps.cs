@@ -75,7 +75,7 @@ namespace FeatureSelect.Tests.Specs
 				Spec.Set(true, "DisabledCalled");
 				return Spec.GetOrDefault<Func<string>>("IfDisabled", () => "b")();
 			};
-			//set => Spec.Set(value, "IfDisabled");
+			set => Spec.Set(value, "IfDisabled");
 		}
 
 		#endregion
@@ -138,6 +138,12 @@ namespace FeatureSelect.Tests.Specs
 		public void GivenFeatureDoesNotThrowAnExceptionIfEnabled(string p0)
 		{
 			IfEnabled = () => "a";
+		}
+
+		[Given(@"feature ""(.*)"" throws an exception if disabled")]
+		public void GivenFeatureThrowsAnExceptionIfDisabled(string p0)
+		{
+			IfDisabled = () => throw new Exception("Oops!");
 		}
 
 		[Given(@"the context contains")]

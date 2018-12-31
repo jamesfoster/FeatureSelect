@@ -24,15 +24,20 @@ namespace FeatureSelect
 		{
 			if (HasExceededMaxFailedAttempts(feature)) return ifDisabled();
 
-			try
+			return inner.Execute(feature, context, IncrementOnFailure(ifEnabled), ifDisabled);
+
+			Func<T> IncrementOnFailure(Func<T> func) => () =>
 			{
-				return inner.Execute(feature, context, ifEnabled, ifDisabled);
-			}
-			catch (Exception)
-			{
-				IncrementFailureCount(feature);
-				throw;
-			}
+				try
+				{
+					return func();
+				}
+				catch (Exception)
+				{
+					IncrementFailureCount(feature);
+					throw;
+				}
+			};
 		}
 
 		private bool HasExceededMaxFailedAttempts(string feature) =>
