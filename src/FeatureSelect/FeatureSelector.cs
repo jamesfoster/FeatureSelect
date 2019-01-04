@@ -4,28 +4,24 @@ namespace FeatureSelect
 {
 	public interface FeatureSelector
 	{
-		T Execute<T>(
+		FeatureExecutor Freeze(
 			string feature,
-			Func<string, Maybe<string>> context,
-			Func<T> ifEnabled,
-			Func<T> ifDisabled
+			Func<string, Maybe<string>> context
 		);
 	}
 
 	public static class FeatureSelectorExtensions
 	{
-		public static FeatureExecutor Freeze(
+		public static T Execute<T>(
 			this FeatureSelector selector,
 			string feature,
-			Func<string, Maybe<string>> context
-			)
+			Func<string, Maybe<string>> context,
+			Func<T> ifEnabled,
+			Func<T> ifDisabled)
 		{
-			return selector.Execute<FeatureExecutor>(
-				feature,
-				context,
-				() => new EnabledExecutor(),
-				() => new DisabledExecutor()
-			);
+			return selector
+				.Freeze(feature, context)
+				.Execute(ifEnabled, ifDisabled);
 		}
 	}
 }

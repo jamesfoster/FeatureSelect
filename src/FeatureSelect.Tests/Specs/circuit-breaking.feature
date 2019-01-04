@@ -81,3 +81,16 @@ Scenario: Exceptions from the disabled code block do not increment the failure c
   | Broken | false |
   When I execute feature "foo"
   Then the enabled code block did execute
+
+Scenario: Circuit breaking works with frozen features
+
+  Given feature "foo" throws an exception if enabled
+  And feature "foo" is enabled
+  And features will be disabled after 3 failed attempts
+  And I freeze feature "foo"
+  When I execute the frozen feature "foo"
+  And I execute the frozen feature "foo"
+  And I execute the frozen feature "foo"
+  Given I freeze feature "foo"
+  When I execute the frozen feature "foo"
+  Then the disabled code block did execute

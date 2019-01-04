@@ -11,15 +11,16 @@ namespace FeatureSelect
 			this.source = source;
 		}
 
-		public T Execute<T>(
+		public FeatureExecutor Freeze(
 			string feature,
-			Func<string, Maybe<string>> context,
-			Func<T> ifEnabled,
-			Func<T> ifDisabled)
+			Func<string, Maybe<string>> context)
 		{
 			var state = source.GetFeatureState(feature, context);
 
-			return state == FeatureState.Enabled ? ifEnabled() : ifDisabled();
+			return state == FeatureState.Enabled ? Enabled : Disabled;
 		}
+
+		private static FeatureExecutor Enabled => new EnabledExecutor();
+		private static FeatureExecutor Disabled => new DisabledExecutor();
 	}
 }

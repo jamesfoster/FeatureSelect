@@ -187,7 +187,14 @@ namespace FeatureSelect.Tests.Specs
 			Spec.Set(false, "EnabledCalled");
 			Spec.Set(false, "DisabledCalled");
 
-			Result = FrozenFeatures[featureName].Execute(IfEnabled, IfDisabled);
+			try
+			{
+				Result = FrozenFeatures[featureName].Execute(IfEnabled, IfDisabled);
+			}
+			catch (Exception e)
+			{
+				ThrownException = e;
+			}
 		}
 
 		[Then(@"the enabled code block did execute")]
