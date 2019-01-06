@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FeatureSelect
+﻿namespace FeatureSelect
 {
 	public class SimpleFeatureSelector : FeatureSelector
 	{
