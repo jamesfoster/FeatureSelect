@@ -24,7 +24,7 @@ namespace FeatureSelect.Tests.Specs
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "context-sensitive-features.feature"
+#line 1 "2.context-sensitive-features.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]

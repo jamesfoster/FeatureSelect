@@ -13,39 +13,46 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="SimpleInjector" Version="4.4.3" />
     <PackageReference Include="SpecFlow.NUnit" Version="2.4.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FeatureSelect.Configuration\FeatureSelect.Configuration.csproj" />
+    <ProjectReference Include="..\FeatureSelect.SimpleInjector\FeatureSelect.SimpleInjector.csproj" />
     <ProjectReference Include="..\FeatureSelect\FeatureSelect.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Specs\context-sensitive-features.feature.cs">
+    <Compile Update="Specs\2.context-sensitive-features.feature.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>context-sensitive-features.feature</DependentUpon>
+      <DependentUpon>2.context-sensitive-features.feature</DependentUpon>
     </Compile>
-    <Compile Update="Specs\circuit-breaking.feature.cs">
+    <Compile Update="Specs\5.circuit-breaking.feature.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>circuit-breaking.feature</DependentUpon>
+      <DependentUpon>5.circuit-breaking.feature</DependentUpon>
     </Compile>
-    <Compile Update="Specs\freeze.feature.cs">
+    <Compile Update="Specs\4.freeze.feature.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>freeze.feature</DependentUpon>
+      <DependentUpon>4.freeze.feature</DependentUpon>
     </Compile>
-    <Compile Update="Specs\config-feature-source.feature.cs">
+    <Compile Update="Specs\3.config-feature-source.feature.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>config-feature-source.feature</DependentUpon>
+      <DependentUpon>3.config-feature-source.feature</DependentUpon>
     </Compile>
-    <Compile Update="Specs\standard-usage.feature.cs">
+    <Compile Update="Specs\1.standard-usage.feature.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>standard-usage.feature</DependentUpon>
+      <DependentUpon>1.standard-usage.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Specs\6.simple-injector.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>6.simple-injector.feature</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -53,25 +60,29 @@
     <None Update="settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Specs\context-sensitive-features.feature">
+    <None Update="Specs\2.context-sensitive-features.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>context-sensitive-features.feature.cs</LastGenOutput>
+      <LastGenOutput>2.context-sensitive-features.feature.cs</LastGenOutput>
     </None>
-    <None Update="Specs\circuit-breaking.feature">
+    <None Update="Specs\5.circuit-breaking.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>circuit-breaking.feature.cs</LastGenOutput>
+      <LastGenOutput>5.circuit-breaking.feature.cs</LastGenOutput>
     </None>
-    <None Update="Specs\freeze.feature">
+    <None Update="Specs\4.freeze.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>freeze.feature.cs</LastGenOutput>
+      <LastGenOutput>4.freeze.feature.cs</LastGenOutput>
     </None>
-    <None Update="Specs\config-feature-source.feature">
+    <None Update="Specs\3.config-feature-source.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>config-feature-source.feature.cs</LastGenOutput>
+      <LastGenOutput>3.config-feature-source.feature.cs</LastGenOutput>
     </None>
-    <None Update="Specs\standard-usage.feature">
+    <None Update="Specs\1.standard-usage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>standard-usage.feature.cs</LastGenOutput>
+      <LastGenOutput>1.standard-usage.feature.cs</LastGenOutput>
+    </None>
+    <None Update="Specs\6.simple-injector.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>6.simple-injector.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
 

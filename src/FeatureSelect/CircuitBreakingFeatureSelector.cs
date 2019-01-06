@@ -18,7 +18,7 @@ namespace FeatureSelect
 
 		public FeatureExecutor Freeze(
 			string feature,
-			Func<string, Maybe<string>> context)
+			FeatureContext context)
 		{
 			if (HasExceededMaxFailedAttempts(feature)) return new DisabledExecutor();
 

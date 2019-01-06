@@ -24,7 +24,7 @@ namespace FeatureSelect.Tests.Specs
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "freeze.feature"
+#line 1 "4.freeze.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]

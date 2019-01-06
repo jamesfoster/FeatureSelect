@@ -13,7 +13,7 @@ namespace FeatureSelect
 
 		public FeatureExecutor Freeze(
 			string feature,
-			Func<string, Maybe<string>> context)
+			FeatureContext context)
 		{
 			var state = source.GetFeatureState(feature, context);
 

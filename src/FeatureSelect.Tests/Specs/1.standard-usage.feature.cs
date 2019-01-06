@@ -24,7 +24,7 @@ namespace FeatureSelect.Tests.Specs
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "standard-usage.feature"
+#line 1 "1.standard-usage.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FeatureSelect.Configuration;
@@ -12,90 +11,25 @@ namespace FeatureSelect.Tests.Specs
 	[Binding]
 	public class FeatureSteps
 	{
-		#region Data
-
-		private static FeatureSource FeatureSource
-		{
-			get => Spec.GetOrDefault(Feature.EmptySource);
-			set => Spec.Set(value);
-		}
-
-		private static FeatureSelector FeatureSelector
-		{
-			get => Spec.GetOrDefault<FeatureSelector>(new SimpleFeatureSelector(FeatureSource));
-			set => Spec.Set(value);
-		}
-
-		private static Func<string, Maybe<string>> FeatureContext
-		{
-			get => Spec.GetOrDefault<Func<string, Maybe<string>>>("FeatureContext", _ => Maybe.Nothing<string>());
-			set => Spec.Set(value, "FeatureContext");
-		}
-
-		private static Dictionary<string, FeatureExecutor> FrozenFeatures
-		{
-			get
-			{
-				if (!Spec.TryGetValue<Dictionary<string, FeatureExecutor>>(out var value))
-				{
-					value = new Dictionary<string, FeatureExecutor>();
-					Spec.Set(value);
-				}
-
-				return value;
-			}
-		}
-
-		private static object Result
-		{
-			get => Spec.Get<object>("Result");
-			set => Spec.Set(value, "Result");
-		}
-
-		private static Exception ThrownException
-		{
-			get => Spec.Get<Exception>();
-			set => Spec.Set(value);
-		}
-
-		private static Func<string> IfEnabled
-		{
-			get => () =>
-			{
-				Spec.Set(true, "EnabledCalled");
-				return Spec.GetOrDefault<Func<string>>("IfEnabled", () => "a")();
-			};
-			set => Spec.Set(value, "IfEnabled");
-		}
-
-		private static Func<string> IfDisabled
-		{
-			get => () =>
-			{
-				Spec.Set(true, "DisabledCalled");
-				return Spec.GetOrDefault<Func<string>>("IfDisabled", () => "b")();
-			};
-			set => Spec.Set(value, "IfDisabled");
-		}
-
-		#endregion
+		private FeatureSource CombineWith(FeatureSource source) =>
+			new CompoundFeatureSource(source, SpecData.FeatureSource);
 
 		[Given(@"feature ""(.*)"" is disabled")]
 		public void GivenFeatureIsDisabled(string featureName)
 		{
-			FeatureSource = new DisabledFeatureSource(featureName);
+			SpecData.FeatureSource = CombineWith(new DisabledFeatureSource(featureName));
 		}
 
 		[Given(@"feature ""(.*)"" is enabled")]
 		public void GivenFeatureIsEnabled(string featureName)
 		{
-			FeatureSource = new EnabledFeatureSource(featureName);
+			SpecData.FeatureSource = CombineWith(new EnabledFeatureSource(featureName));
 		}
 
 		[Given(@"feature ""(.*)"" is enabled when the context contains")]
 		public void GivenFeatureIsEnabledWhenTheContextContains(string featureName, Table table)
 		{
-			FeatureSource = new TableFeatureSource(featureName, table);
+			SpecData.FeatureSource = CombineWith(new TableFeatureSource(featureName, table));
 		}
 
 		[Given(@"features are defined in a config file ""(.*)"" under prefix ""(.*)""")]
@@ -107,43 +41,49 @@ namespace FeatureSelect.Tests.Specs
 				.Build()
 				.GetSection(prefix);
 
-			FeatureSource = new ConfigurationFeatureSource(config);
+			SpecData.FeatureSource = new ConfigurationFeatureSource(config);
 		}
 
 		[Given(@"I freeze feature ""(.*)""")]
 		public void GivenIFreezeFeature(string featureName)
 		{
-			FrozenFeatures[featureName] = FeatureSelector.Freeze(featureName, FeatureContext);
+			SpecData.FrozenFeatures[featureName] = SpecData.FeatureSelector.Freeze(
+				featureName,
+				SpecData.FeatureContext
+			);
 		}
 
 		[Given(@"features will be disabled after (.*) failed attempts")]
 		public void GivenFeaturesWillBeDisabledAfterFailedAttempts(int attemps)
 		{
-			FeatureSelector = new CircuitBreakingFeatureSelector(FeatureSelector, attemps);
+			SpecData.FeatureSelector = new CircuitBreakingFeatureSelector(
+				SpecData.FeatureSelector,
+				attemps
+			);
 		}
 
 		[When(@"I reset the circuit breaker for feature ""(.*)""")]
 		public void WhenIResetTheCircuitBreakerForFeature(string featureName)
 		{
-			((CircuitBreakingFeatureSelector)FeatureSelector).Reset(featureName);
+			((CircuitBreakingFeatureSelector)SpecData.FeatureSelector).Reset(featureName);
 		}
 
 		[Given(@"feature ""(.*)"" throws an exception if enabled")]
 		public void GivenFeatureThrowsAnExceptionIfEnabled(string featureName)
 		{
-			IfEnabled = () => throw new Exception("Oops!");
+			SpecData.IfEnabled = () => throw new Exception("Oops!");
 		}
 
 		[Given(@"feature ""(.*)"" does not throw an exception if enabled")]
 		public void GivenFeatureDoesNotThrowAnExceptionIfEnabled(string p0)
 		{
-			IfEnabled = () => "a";
+			SpecData.IfEnabled = () => "a";
 		}
 
 		[Given(@"feature ""(.*)"" throws an exception if disabled")]
 		public void GivenFeatureThrowsAnExceptionIfDisabled(string p0)
 		{
-			IfDisabled = () => throw new Exception("Oops!");
+			SpecData.IfDisabled = () => throw new Exception("Oops!");
 		}
 
 		[Given(@"the context contains")]
@@ -153,7 +93,7 @@ namespace FeatureSelect.Tests.Specs
 				.Rows
 				.ToDictionary(x => x["Key"], x => ParseNull(x["Value"]));
 
-			FeatureContext = key => map.TryGetValue(key, out var value)
+			SpecData.FeatureContext = key => map.TryGetValue(key, out var value)
 				? Maybe.Just(value)
 				: Maybe.Nothing<string>();
 
@@ -168,16 +108,16 @@ namespace FeatureSelect.Tests.Specs
 
 			try
 			{
-				Result = FeatureSelector.Execute(
+				SpecData.Result = SpecData.FeatureSelector.Execute(
 					featureName,
-					FeatureContext,
-					IfEnabled,
-					IfDisabled
+					SpecData.FeatureContext,
+					SpecData.IfEnabled,
+					SpecData.IfDisabled
 				);
 			}
 			catch (Exception e)
 			{
-				ThrownException = e;
+				SpecData.ThrownException = e;
 			}
 		}
 
@@ -189,11 +129,13 @@ namespace FeatureSelect.Tests.Specs
 
 			try
 			{
-				Result = FrozenFeatures[featureName].Execute(IfEnabled, IfDisabled);
+				SpecData.Result = SpecData
+					.FrozenFeatures[featureName]
+					.Execute(SpecData.IfEnabled, SpecData.IfDisabled);
 			}
 			catch (Exception e)
 			{
-				ThrownException = e;
+				SpecData.ThrownException = e;
 			}
 		}
 
@@ -224,19 +166,19 @@ namespace FeatureSelect.Tests.Specs
 		[Then(@"the result is the result of the enabled code block")]
 		public void ThenTheResultIsTheResultOfTheEnabledCodeBlock()
 		{
-			Assert.AreEqual("a", Result);
+			Assert.AreEqual("a", SpecData.Result);
 		}
 
 		[Then(@"the result is the result of the disabled code block")]
 		public void ThenTheResultIsTheResultOfTheDisabledCodeBlock()
 		{
-			Assert.AreEqual("b", Result);
+			Assert.AreEqual("b", SpecData.Result);
 		}
 
 		[Then(@"feature ""(.*)"" is disabled")]
 		public void ThenFeatureIsDisabled(string featureName)
 		{
-			var state = FeatureSource.GetFeatureState(featureName, FeatureContext);
+			var state = SpecData.FeatureSource.GetFeatureState(featureName, SpecData.FeatureContext);
 
 			Assert.AreEqual($"{featureName}:Disabled", $"{featureName}:{state}");
 		}
@@ -244,7 +186,7 @@ namespace FeatureSelect.Tests.Specs
 		[Then(@"feature ""(.*)"" is enabled")]
 		public void ThenFeatureIsEnabled(string featureName)
 		{
-			var state = FeatureSource.GetFeatureState(featureName, FeatureContext);
+			var state = SpecData.FeatureSource.GetFeatureState(featureName, SpecData.FeatureContext);
 
 			Assert.AreEqual($"{featureName}:Enabled", $"{featureName}:{state}");
 		}
@@ -252,7 +194,7 @@ namespace FeatureSelect.Tests.Specs
 		[Then(@"feature ""(.*)"" is unknown")]
 		public void ThenFeatureIsUnknown(string featureName)
 		{
-			var state = FeatureSource.GetFeatureState(featureName, FeatureContext);
+			var state = SpecData.FeatureSource.GetFeatureState(featureName, SpecData.FeatureContext);
 
 			Assert.AreEqual($"{featureName}:Unknown", $"{featureName}:{state}");
 		}
@@ -260,7 +202,28 @@ namespace FeatureSelect.Tests.Specs
 		[Then(@"the exception is thrown")]
 		public void ThenTheExceptionIsThrown()
 		{
-			Assert.AreEqual("Oops!", ThrownException.Message);
+			Assert.AreEqual("Oops!", SpecData.ThrownException.Message);
+		}
+	}
+
+	public class CompoundFeatureSource : FeatureSource
+	{
+		private readonly FeatureSource first;
+		private readonly FeatureSource second;
+
+		public CompoundFeatureSource(FeatureSource first, FeatureSource second)
+		{
+			this.first = first;
+			this.second = second;
+		}
+
+		public FeatureState GetFeatureState(string feature, FeatureContext context)
+		{
+			var state = first.GetFeatureState(feature, context);
+
+			return state != FeatureState.Unknown 
+				? state 
+				: second.GetFeatureState(feature, context);
 		}
 	}
 
@@ -271,7 +234,7 @@ namespace FeatureSelect.Tests.Specs
 		public EnabledFeatureSource(string enabledFeature) =>
 			this.enabledFeature = enabledFeature;
 
-		public FeatureState GetFeatureState(string feature, Func<string, Maybe<string>> context) =>
+		public FeatureState GetFeatureState(string feature, FeatureContext context) =>
 			feature == enabledFeature ? FeatureState.Enabled : FeatureState.Unknown;
 	}
 
@@ -282,7 +245,7 @@ namespace FeatureSelect.Tests.Specs
 		public DisabledFeatureSource(string disabledFeature) =>
 			this.disabledFeature = disabledFeature;
 
-		public FeatureState GetFeatureState(string feature, Func<string, Maybe<string>> context) =>
+		public FeatureState GetFeatureState(string feature, FeatureContext context) =>
 			feature == disabledFeature ? FeatureState.Disabled : FeatureState.Unknown;
 	}
 
@@ -297,7 +260,7 @@ namespace FeatureSelect.Tests.Specs
 			this.table = table;
 		}
 
-		public FeatureState GetFeatureState(string feature, Func<string, Maybe<string>> context)
+		public FeatureState GetFeatureState(string feature, FeatureContext context)
 		{
 			if (feature != featureName) return FeatureState.Unknown;
 

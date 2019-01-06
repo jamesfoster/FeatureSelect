@@ -1,6 +1,11 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
+    <MetricsExclusionList>
+      <Value>FeatureSelect.SimpleInjector\FeatureSelect.SimpleInjector.csproj:netstandard2.0</Value>
+      <Value>FeatureSelect.Configuration\FeatureSelect.Configuration.csproj:netstandard2.0</Value>
+      <Value>FeatureSelect\FeatureSelect.csproj:netstandard2.0</Value>
+    </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>

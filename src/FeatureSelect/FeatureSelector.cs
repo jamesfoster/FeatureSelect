@@ -6,7 +6,7 @@ namespace FeatureSelect
 	{
 		FeatureExecutor Freeze(
 			string feature,
-			Func<string, Maybe<string>> context
+			FeatureContext context
 		);
 	}
 
@@ -15,7 +15,7 @@ namespace FeatureSelect
 		public static T Execute<T>(
 			this FeatureSelector selector,
 			string feature,
-			Func<string, Maybe<string>> context,
+			FeatureContext context,
 			Func<T> ifEnabled,
 			Func<T> ifDisabled)
 		{

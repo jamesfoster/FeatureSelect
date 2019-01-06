@@ -10,7 +10,7 @@ namespace FeatureSelect
 		{
 			public FeatureState GetFeatureState(
 				string feature,
-				Func<string, Maybe<string>> context
+				FeatureContext context
 			) => FeatureState.Unknown;
 		}
 	}

@@ -14,7 +14,7 @@ namespace FeatureSelect.Configuration
 			this.config = config;
 		}
 
-		public FeatureState GetFeatureState(string feature, Func<string, Maybe<string>> context)
+		public FeatureState GetFeatureState(string feature, FeatureContext context)
 		{
 			var section = config.GetSection(feature);
 
@@ -30,7 +30,7 @@ namespace FeatureSelect.Configuration
 
 		private static FeatureState ExamineContext(
 			IConfiguration section,
-			Func<string, Maybe<string>> context)
+			FeatureContext context)
 		{
 			var children = section.GetChildren().ToList();
 
