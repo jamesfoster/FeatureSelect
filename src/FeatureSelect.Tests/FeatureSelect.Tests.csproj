@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFrameworks>net462</TargetFrameworks>
 
     <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
 
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
@@ -15,6 +16,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="SimpleInjector" Version="4.4.3" />
     <PackageReference Include="SpecFlow.NUnit" Version="2.4.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
   </ItemGroup>
 
   <ItemGroup>

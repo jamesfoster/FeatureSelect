@@ -2,7 +2,15 @@
 
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0;netstandard1.0</TargetFrameworks>
+    
     <LangVersion>7.3</LangVersion>
+    
+    <Authors>James Foster</Authors>
+    <PackageTags>featureselect feature toggle select continuous integration</PackageTags>
+    <Description>An extensible library for feature toggling in .NET</Description>
+    <Copyright>Copyright 2018</Copyright>
+    <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageProjectUrl>http://github.com/jamesfoster/FeatureSelect</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

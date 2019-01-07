@@ -1,13 +1,21 @@
 @echo off
 
-set path=%path%;c:\Windows\Microsoft.NET\Framework64\v4.0.30319
-
-call msbuild src\FeatureSelect\FeatureSelect.csproj /t:rebuild /p:Configuration=Release
-call msbuild src\FeatureSelect.Sql\FeatureSelect.Sql.csproj /t:rebuild /p:Configuration=Release
+echo.
+echo === TEST ===
+echo.
+dotnet test --configuration Release src/FeatureSelect.Tests/FeatureSelect.Tests.csproj
 
 echo.
-NuGet pack src\FeatureSelect\FeatureSelect.csproj -Prop Configuration=Release
-NuGet pack src\FeatureSelect.Sql\FeatureSelect.Sql.csproj -Prop Configuration=Release
+echo === PACKAGE ===
+echo.
+set /p version=<version.txt
+
+dotnet pack --include-symbols --include-source --configuration Release --output ..\.. -p:PackageVersion=%version% ^
+  src\FeatureSelect\FeatureSelect.csproj
+dotnet pack --include-symbols --include-source --configuration Release --output ..\.. -p:PackageVersion=%version% ^
+  src\FeatureSelect.Configuration\FeatureSelect.Configuration.csproj
+dotnet pack --include-symbols --include-source --configuration Release --output ..\.. -p:PackageVersion=%version% ^
+  src\FeatureSelect.SimpleInjector\FeatureSelect.SimpleInjector.csproj
 
 echo.
 pause

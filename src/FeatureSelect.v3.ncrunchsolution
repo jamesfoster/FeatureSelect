@@ -5,6 +5,8 @@
       <Value>FeatureSelect.SimpleInjector\FeatureSelect.SimpleInjector.csproj:netstandard2.0</Value>
       <Value>FeatureSelect.Configuration\FeatureSelect.Configuration.csproj:netstandard2.0</Value>
       <Value>FeatureSelect\FeatureSelect.csproj:netstandard2.0</Value>
+      <Value>FeatureSelect\FeatureSelect.csproj:netstandard1.0</Value>
+      <Value>FeatureSelect.SimpleInjector\FeatureSelect.SimpleInjector.csproj:netstandard1.0</Value>
     </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>

@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0;netstandard1.0</TargetFrameworks>
+
+    <Authors>James Foster</Authors>
+    <PackageTags>featureselect feature toggle select continuous integration simpleinjector container</PackageTags>
+    <Description>A SimpleInjector plugin for FeatureSelect</Description>
+    <Copyright>Copyright 2018</Copyright>
+    <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageProjectUrl>http://github.com/jamesfoster/FeatureSelect</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
