@@ -1,20 +1,20 @@
 ﻿namespace FeatureSelect;
 
-public interface Feature
+public abstract class Feature
 {
-    T Execute<T>(Func<T> ifEnabled, Func<T> ifDisabled);
+    public abstract T Execute<T>(Func<T> ifEnabled, Func<T> ifDisabled);
 
     public static readonly Feature Enabled = new EnabledImpl();
     public static readonly Feature Disabled = new DisabledImpl();
 
     private class EnabledImpl : Feature
     {
-        public T Execute<T>(Func<T> ifEnabled, Func<T> ifDisabled) => ifEnabled();
+        public override T Execute<T>(Func<T> ifEnabled, Func<T> ifDisabled) => ifEnabled();
     }
 
     private class DisabledImpl : Feature
     {
-        public T Execute<T>(Func<T> ifEnabled, Func<T> ifDisabled) => ifDisabled();
+        public override T Execute<T>(Func<T> ifEnabled, Func<T> ifDisabled) => ifDisabled();
     }
 }
 

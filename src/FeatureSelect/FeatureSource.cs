@@ -1,9 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace FeatureSelect;
+﻿namespace FeatureSelect;
 
 public interface FeatureSource
 {
-    [return: NotNull]
     Feature GetFeature(string feature);
 }
