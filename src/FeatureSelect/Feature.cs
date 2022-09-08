@@ -17,3 +17,14 @@ public interface Feature
         public T Execute<T>(Func<T> ifEnabled, Func<T> ifDisabled) => ifDisabled();
     }
 }
+
+public static class FeatureExtensions
+{
+    public static void Execute(this Feature feature, Action ifEnabled, Action ifDisabled)
+    {
+        feature.Execute(
+            () => { ifEnabled(); return 0; },
+            () => { ifDisabled(); return 0; }
+        );
+    }
+}

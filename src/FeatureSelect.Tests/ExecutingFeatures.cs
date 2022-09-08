@@ -21,6 +21,30 @@ namespace FeatureSelect.Tests
 
             Assert.That(result, Is.EqualTo("enabled"));
         }
+
+        [Test]
+        public void When_a_feature_is_disabled_executes_disabled_callback_no_result()
+        {
+            var sut = new DisabledFeatureSourceStub();
+
+            sut.GetFeature("my-feature")
+                .Execute(
+                    ifEnabled: () => Assert.Fail("Feature should be disabled"),
+                    ifDisabled: () => { }
+                );
+        }
+
+        [Test]
+        public void When_a_feature_is_enabled_executes_enabled_callback_no_result()
+        {
+            var sut = new EnabledFeatureSourceStub();
+
+            sut.GetFeature("my-feature")
+                .Execute(
+                    ifEnabled: () => { },
+                    ifDisabled: () => Assert.Fail("Feature should be disabled")
+                );
+        }
     }
 
     internal class DisabledFeatureSourceStub : FeatureSource
