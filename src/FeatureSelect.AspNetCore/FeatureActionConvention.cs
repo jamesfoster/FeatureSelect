@@ -8,7 +8,7 @@ namespace FeatureSelect.AspNetCore;
 
 internal class MvcFeatureConvention : IApplicationModelConvention
 {
-    private FeatureSource source;
+    private readonly FeatureSource source;
 
     public MvcFeatureConvention(FeatureSource source)
     {

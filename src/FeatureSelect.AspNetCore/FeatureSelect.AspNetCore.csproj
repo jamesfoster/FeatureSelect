@@ -6,6 +6,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+
+    <Version>1.0.1</Version>
+    <Description>An extension to FeatureSelect to add ASP.NET Core integration</Description>
+    <Authors>James Foster</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>http://github.com/jamesfoster/FeatureSelect</PackageProjectUrl>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <Copyright>James Foster 2022</Copyright>
+    <PackageTags>feature toggle aspnet core</PackageTags>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">

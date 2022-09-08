@@ -7,14 +7,14 @@
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 
-    <Version>1.0.0</Version>
-    <Description>A flexible feature toggle library with ASP.NET Core integration</Description>
+    <Version>1.0.1</Version>
+    <Description>A flexible feature toggle library</Description>
     <Authors>James Foster</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>http://github.com/jamesfoster/FeatureSelect</PackageProjectUrl>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
     <Copyright>James Foster 2022</Copyright>
-    <PackageTags>feature toggle aspnet core</PackageTags>
+    <PackageTags>feature toggle</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
