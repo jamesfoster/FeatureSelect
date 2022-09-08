@@ -1,0 +1,6 @@
+﻿{
+  "Features": {
+    "my-enabled-feature": "enabled",
+    "my-disabled-feature": "disabled"
+  }
+}
