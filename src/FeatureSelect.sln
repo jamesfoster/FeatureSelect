@@ -7,11 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureSelect", "FeatureSel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureSelect.Tests", "FeatureSelect.Tests\FeatureSelect.Tests.csproj", "{350890C6-E303-4A3A-828A-D05D89DF7F1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureSelect.AspNetCore", "FeatureSelect.AspNetCore\FeatureSelect.AspNetCore.csproj", "{BBD0FB41-19BB-42AD-A0A1-A956DB1E6077}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureSelect.AspNetCore", "FeatureSelect.AspNetCore\FeatureSelect.AspNetCore.csproj", "{BBD0FB41-19BB-42AD-A0A1-A956DB1E6077}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureSelect.Tests.SampleApi.NET6", "FeatureSelect.Tests.SampleApi.NET6\FeatureSelect.Tests.SampleApi.NET6.csproj", "{9E6EE88C-3D2B-4B87-931D-DDF02909DF26}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureSelect.Tests.SampleApi.NET3_1", "FeatureSelect.Tests.SampleApi.NET3_1\FeatureSelect.Tests.SampleApi.NET3_1.csproj", "{962A5817-0C5A-42A5-B620-75FFAAF4553C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureSelect.NUnit", "FeatureSelect.NUnit\FeatureSelect.NUnit.csproj", "{39590205-5AEE-40E7-A70A-40D3DC217498}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{962A5817-0C5A-42A5-B620-75FFAAF4553C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{962A5817-0C5A-42A5-B620-75FFAAF4553C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{962A5817-0C5A-42A5-B620-75FFAAF4553C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39590205-5AEE-40E7-A70A-40D3DC217498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39590205-5AEE-40E7-A70A-40D3DC217498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39590205-5AEE-40E7-A70A-40D3DC217498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39590205-5AEE-40E7-A70A-40D3DC217498}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

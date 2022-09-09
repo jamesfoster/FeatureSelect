@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <Description>An extension to FeatureSelect to add ASP.NET Core integration</Description>
     <Authors>James Foster</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

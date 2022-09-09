@@ -7,7 +7,7 @@ using System.Net;
 using FeatureSelect.Tests.SampleApi.NEW3_1;
 #endif
 
-namespace FeatureSelect.Tests
+namespace FeatureSelect.Tests.AspNetCore
 {
     public class DisablingControllerActions
     {

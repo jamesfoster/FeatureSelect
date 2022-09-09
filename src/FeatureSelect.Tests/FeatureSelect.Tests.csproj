@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FeatureSelect.NUnit\FeatureSelect.NUnit.csproj" />
     <ProjectReference Include="..\FeatureSelect\FeatureSelect.csproj" />
   </ItemGroup>
 
